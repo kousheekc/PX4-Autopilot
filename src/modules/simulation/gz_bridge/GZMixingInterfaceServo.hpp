@@ -36,6 +36,7 @@
 #include <lib/mixer_module/mixer_module.hpp>
 
 #include <gz/transport.hh>
+#include <px4_platform_common/module_params.h>
 
 // GZBridge mixing class for Servos.
 // It is separate from GZBridge to have separate WorkItems and therefore allowing independent scheduling
@@ -66,6 +67,14 @@ private:
 	friend class GZBridge;
 
 	void Run() override;
+	int get_active_output_count();
+	float get_tl_angle_max(const size_t index);
+	float get_tl_angle_min(const size_t index);
+	float get_cs_angle_max(const size_t index);
+	float get_cs_angle_min(const size_t index);
+	bool is_tiltrotor(const int index);
+	double get_angle_min_wrapper(const int index);
+	double get_angle_max_wrapper(const int index);
 
 	gz::transport::Node &_node;
 	pthread_mutex_t &_node_mutex;
@@ -73,4 +82,35 @@ private:
 	MixingOutput _mixing_output{"SIM_GZ_SV", MAX_ACTUATORS, *this, MixingOutput::SchedulingPolicy::Auto, false, false};
 
 	std::vector<gz::transport::Node::Publisher> _servos_pub;
+	std::vector<double> _angle_min_rad;
+	std::vector<double> _angular_range_rad;
+
+	DEFINE_PARAMETERS(
+		(ParamFloat<px4::params::CA_SV_TL0_MAXA>) _ca_sv_tl_max_a_0,
+		(ParamFloat<px4::params::CA_SV_TL0_MINA>) _ca_sv_tl_min_a_0,
+		(ParamFloat<px4::params::CA_SV_TL1_MAXA>) _ca_sv_tl_max_a_1,
+		(ParamFloat<px4::params::CA_SV_TL1_MINA>) _ca_sv_tl_min_a_1,
+		(ParamFloat<px4::params::CA_SV_TL2_MAXA>) _ca_sv_tl_max_a_2,
+		(ParamFloat<px4::params::CA_SV_TL2_MINA>) _ca_sv_tl_min_a_2,
+		(ParamFloat<px4::params::CA_SV_TL3_MAXA>) _ca_sv_tl_max_a_3,
+		(ParamFloat<px4::params::CA_SV_TL3_MINA>) _ca_sv_tl_min_a_3,
+		(ParamFloat<px4::params::CA_SV_CS0_MAXA>) _ca_sv_cs_max_a_0,
+		(ParamFloat<px4::params::CA_SV_CS0_MINA>) _ca_sv_cs_min_a_0,
+		(ParamFloat<px4::params::CA_SV_CS1_MAXA>) _ca_sv_cs_max_a_1,
+		(ParamFloat<px4::params::CA_SV_CS1_MINA>) _ca_sv_cs_min_a_1,
+		(ParamFloat<px4::params::CA_SV_CS2_MAXA>) _ca_sv_cs_max_a_2,
+		(ParamFloat<px4::params::CA_SV_CS2_MINA>) _ca_sv_cs_min_a_2,
+		(ParamFloat<px4::params::CA_SV_CS3_MAXA>) _ca_sv_cs_max_a_3,
+		(ParamFloat<px4::params::CA_SV_CS3_MINA>) _ca_sv_cs_min_a_3,
+		(ParamFloat<px4::params::CA_SV_CS4_MAXA>) _ca_sv_cs_max_a_4,
+		(ParamFloat<px4::params::CA_SV_CS4_MINA>) _ca_sv_cs_min_a_4,
+		(ParamFloat<px4::params::CA_SV_CS5_MAXA>) _ca_sv_cs_max_a_5,
+		(ParamFloat<px4::params::CA_SV_CS5_MINA>) _ca_sv_cs_min_a_5,
+		(ParamFloat<px4::params::CA_SV_CS6_MAXA>) _ca_sv_cs_max_a_6,
+		(ParamFloat<px4::params::CA_SV_CS6_MINA>) _ca_sv_cs_min_a_6,
+		(ParamFloat<px4::params::CA_SV_CS7_MAXA>) _ca_sv_cs_max_a_7,
+		(ParamFloat<px4::params::CA_SV_CS7_MINA>) _ca_sv_cs_min_a_7,
+		(ParamInt<px4::params::CA_SV_CS_COUNT>) _control_surface_count,
+		(ParamInt<px4::params::CA_SV_TL_COUNT>) _tilt_count
+	)
 };
