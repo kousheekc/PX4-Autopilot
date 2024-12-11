@@ -72,9 +72,32 @@ private:
 	float get_tl_angle_min(const size_t index);
 	float get_cs_angle_max(const size_t index);
 	float get_cs_angle_min(const size_t index);
+
+	/**
+	 * @brief Checks if the servo index is configured to tiltrotor.
+	 * Tiltrotors should be ordered after the control surfaces.
+	 * @param index: int
+	 * @return True if the index is as expected, otherwise False.
+	 */
 	bool is_tiltrotor(const int index);
-	double get_angle_min_wrapper(const int index);
+
+	/**
+	 * @brief Get maximum configured angle of servo.
+	 * Takes the maximum value from tilt or control surface param
+	 * dependent on input index.
+	 * @param index: servo index
+	 * @return angle_max [rad]
+	 */
 	double get_angle_max_wrapper(const int index);
+
+	/**
+	 * @brief Get minimum configured angle of servo.
+	 * Takes the minimum value from tilt or control surface param
+	 * dependent on input index.
+	 * @param index: servo index
+	 * @return angle_min [rad]
+	 */
+	double get_angle_min_wrapper(const int index);
 
 	gz::transport::Node &_node;
 	pthread_mutex_t &_node_mutex;

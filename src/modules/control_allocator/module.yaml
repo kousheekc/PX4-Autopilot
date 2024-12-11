@@ -347,7 +347,7 @@ parameters:
                 short: Control Surface ${i} Angle at Maximum
                 long: |
                   Defines the angle when the servo is at the maximum.
-                  Currently only supported in gz simulation.
+                  Currently only supported in gz simulation and must be coherent with .sdf file.
             type: float
             decimal: 0
             num_instances: *max_num_servos
@@ -361,7 +361,7 @@ parameters:
                 short: Control Surface ${i} Angle at Minimum
                 long: |
                   Defines the angle when the servo is at the minimum.
-                  Currently only supported in gz simulation.
+                  Currently only supported in gz simulation and must be coherent with .sdf file.
             type: float
             decimal: 0
             num_instances: *max_num_servos
