@@ -135,6 +135,7 @@ set(msg_files
 	LedControl.msg
 	LoggerStatus.msg
 	LogMessage.msg
+	LongitudinalControlLimits.msg
 	MagnetometerBiasEstimate.msg
 	MagWorkerData.msg
 	ManualControlSetpoint.msg
