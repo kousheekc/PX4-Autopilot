@@ -103,7 +103,7 @@ TEST_F(EkfHeightFusionTest, baroRef)
 	_ekf_wrapper.enableGpsHeightFusion();
 	_ekf_wrapper.enableRangeHeightFusion();
 	/* _ekf_wrapper.enableExternalVisionHeightFusion(); */ //TODO: this currently sets the reference to EV
-	_sensor_simulator.runSeconds(1);
+	_sensor_simulator.runSeconds(10);
 
 	EXPECT_TRUE(_ekf->getHeightSensorRef() == HeightSensor::BARO);
 	EXPECT_TRUE(_ekf_wrapper.isIntendingBaroHeightFusion());
@@ -168,7 +168,7 @@ TEST_F(EkfHeightFusionTest, gpsRef)
 	_ekf_wrapper.enableBaroHeightFusion();
 	_ekf_wrapper.enableGpsHeightFusion();
 	_ekf_wrapper.enableRangeHeightFusion();
-	_sensor_simulator.runSeconds(1);
+	_sensor_simulator.runSeconds(10);
 
 	EXPECT_TRUE(_ekf->getHeightSensorRef() == HeightSensor::GNSS);
 	EXPECT_TRUE(_ekf_wrapper.isIntendingBaroHeightFusion());
@@ -222,7 +222,7 @@ TEST_F(EkfHeightFusionTest, baroRefFailOver)
 	_ekf_wrapper.enableGpsHeightFusion();
 	_ekf_wrapper.enableRangeHeightFusion();
 
-	_sensor_simulator.runSeconds(0.1);
+	_sensor_simulator.runSeconds(10);
 
 	EXPECT_TRUE(_ekf->getHeightSensorRef() == HeightSensor::BARO);
 

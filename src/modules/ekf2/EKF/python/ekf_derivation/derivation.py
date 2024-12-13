@@ -733,7 +733,7 @@ def range_validation_filter() -> sf.matrix:
 
     z = sf.Symbol("z")
     dist_bottom = sf.Symbol("dist_bottom")
-    terrain = dist_bottom - z
+    terrain = z - dist_bottom
     state = sf.V2.symbolic("state")
     state_indices = {"z": 0, "dist_bottom": 1}
     state[state_indices["z"]] = z
