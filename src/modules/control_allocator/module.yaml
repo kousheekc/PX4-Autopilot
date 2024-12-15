@@ -342,34 +342,6 @@ parameters:
             instance_start: 0
             default: 0
 
-        CA_SV_CS${i}_MAXA:
-            description:
-                short: Control Surface ${i} Angle at Maximum
-                long: |
-                  Defines the angle when the servo is at the maximum.
-                  Currently only supported in gz simulation and must be coherent with .sdf file.
-            type: float
-            decimal: 0
-            num_instances: *max_num_servos
-            instance_start: 0
-            min: -180.0
-            max: 180.0
-            default: 45.0
-
-        CA_SV_CS${i}_MINA:
-            description:
-                short: Control Surface ${i} Angle at Minimum
-                long: |
-                  Defines the angle when the servo is at the minimum.
-                  Currently only supported in gz simulation and must be coherent with .sdf file.
-            type: float
-            decimal: 0
-            num_instances: *max_num_servos
-            instance_start: 0
-            min: -180.0
-            max: 180.0
-            default: -45.0
-
         # Tilts
         CA_SV_TL_COUNT:
             description:

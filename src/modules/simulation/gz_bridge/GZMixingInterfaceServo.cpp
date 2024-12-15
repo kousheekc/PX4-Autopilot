@@ -33,123 +33,6 @@
 
 #include "GZMixingInterfaceServo.hpp"
 
-float
-GZMixingInterfaceServo::get_tl_angle_max(const size_t index)
-{
-	switch (index) {
-	case 0: return _ca_sv_tl_max_a_0.get();
-
-	case 1: return _ca_sv_tl_max_a_1.get();
-
-	case 2: return _ca_sv_tl_max_a_2.get();
-
-	case 3: return _ca_sv_tl_max_a_3.get();
-
-	default: return 0.f;
-	}
-}
-
-float
-GZMixingInterfaceServo::get_tl_angle_min(const size_t index)
-{
-	switch (index) {
-	case 0: return _ca_sv_tl_min_a_0.get();
-
-	case 1: return _ca_sv_tl_min_a_1.get();
-
-	case 2: return _ca_sv_tl_min_a_2.get();
-
-	case 3: return _ca_sv_tl_min_a_3.get();
-
-	default: return 0.f;
-	}
-}
-
-float
-GZMixingInterfaceServo::get_cs_angle_max(const size_t index)
-{
-	switch (index) {
-	case 0: return _ca_sv_cs_max_a_0.get();
-
-	case 1: return _ca_sv_cs_max_a_1.get();
-
-	case 2: return _ca_sv_cs_max_a_2.get();
-
-	case 3: return _ca_sv_cs_max_a_3.get();
-
-	case 4: return _ca_sv_cs_max_a_4.get();
-
-	case 5: return _ca_sv_cs_max_a_5.get();
-
-	case 6: return _ca_sv_cs_max_a_6.get();
-
-	case 7: return _ca_sv_cs_max_a_7.get();
-
-	default: return 0.f;
-	}
-}
-
-float
-GZMixingInterfaceServo::get_cs_angle_min(const size_t index)
-{
-	switch (index) {
-	case 0: return _ca_sv_cs_min_a_0.get();
-
-	case 1: return _ca_sv_cs_min_a_1.get();
-
-	case 2: return _ca_sv_cs_min_a_2.get();
-
-	case 3: return _ca_sv_cs_min_a_3.get();
-
-	case 4: return _ca_sv_cs_min_a_4.get();
-
-	case 5: return _ca_sv_cs_min_a_5.get();
-
-	case 6: return _ca_sv_cs_min_a_6.get();
-
-	case 7: return _ca_sv_cs_min_a_7.get();
-
-	default: return 0.f;
-	}
-}
-
-int GZMixingInterfaceServo::get_active_output_count()
-{
-	return _control_surface_count.get() + _tilt_count.get();
-}
-
-bool GZMixingInterfaceServo::is_tiltrotor(const int index)
-{
-	if (_tilt_count.get() < 1) {
-		return false;
-	}
-
-	return (index > _control_surface_count.get() - 1) && (index < get_active_output_count());
-}
-
-double GZMixingInterfaceServo::get_angle_max_wrapper(const int index)
-{
-	if (index >= get_active_output_count()) {
-		return 0.;
-	}
-
-	double angle = is_tiltrotor(index) ? (double)get_tl_angle_max(index - _control_surface_count.get()) : (
-			       double)get_cs_angle_max(index);
-
-	return math::radians(angle);
-}
-
-double GZMixingInterfaceServo::get_angle_min_wrapper(const int index)
-{
-	if (index >= get_active_output_count()) {
-		return 0.;
-	}
-
-	double angle = is_tiltrotor(index) ? (double)get_tl_angle_min(index - _control_surface_count.get()) : (
-			       double)get_cs_angle_min(index);
-
-	return math::radians(angle);
-}
 
 bool GZMixingInterfaceServo::init(const std::string &model_name)
 {
@@ -164,11 +47,6 @@ bool GZMixingInterfaceServo::init(const std::string &model_name)
 			PX4_ERR("failed to advertise %s", servo_topic.c_str());
 			return false;
 		}
-
-		double min_val = get_angle_min_wrapper(i);
-		double max_val = get_angle_max_wrapper(i);
-		_angle_min_rad.push_back(min_val);
-		_angular_range_rad.push_back(max_val - min_val);
 	}
 
 	ScheduleNow();
@@ -188,8 +66,9 @@ bool GZMixingInterfaceServo::updateOutputs(bool stop_motors, uint16_t outputs[MA
 		if (_mixing_output.isFunctionSet(i)) {
 			gz::msgs::Double servo_output;
 
-			double output_range = _mixing_output.maxValue(i) - _mixing_output.minValue(i);
-			double output = _angle_min_rad[i] + _angular_range_rad[i] * (outputs[i] - _mixing_output.minValue(i)) / output_range;
+
+			double output = math::radians((double)outputs[i] / 10. - 180.);
+
 			// std::cout << "outputs[" << i << "]: " << outputs[i] << std::endl;
 			// std::cout << "  output: " << output << std::endl;
 			servo_output.set_data(output);

@@ -282,12 +282,34 @@ The default failsafe value is set according to the selected function:
 
 Note that non-motor outputs might already be active in prearm state if COM_PREARM_MODE is set.
 '''
-        minimum_description = \
-'''Minimum output value (when not disarmed).
-'''
-        maximum_description = \
-'''Maxmimum output value (when not disarmed).
-'''
+        if param_prefix == 'SIM_GZ_SV':
+            minimum_description = \
+    '''
+    Servo output represents angles [0, 360] deg scaled with 10 for numerical precision,
+    with an offset of -180 deg to allow for negative angles.
+    Hence, myMin = (180 + myOffset) * 10 resulting angles within [-180,180] deg.
+
+    Min max must be coherent with joint limits in the airframe/model.sdf
+
+    Ex. ailerons with a minimum angle -45 deg would be 1350.
+    '''
+            maximum_description = \
+    '''
+    Servo output represents angles [0, 360] deg scaled with 10 for numerical precision,
+    with an offset of -180 deg to allow for negative angles.
+    Hence, myMin = (180 + myOffset) * 10 resulting angles within [-180,180] deg.
+
+    Min max must be coherent with joint limits in the airframe/model.sdf
+
+    Ex. ailerons with a maximum angle 45 deg would be 2250.
+    '''
+        else:
+            minimum_description = \
+    '''Minimum output value (when not disarmed).
+    '''
+            maximum_description = \
+    '''Maxmimum output value (when not disarmed).
+    '''
         failsafe_description = \
 '''This is the output value that is set when in failsafe mode.
 
