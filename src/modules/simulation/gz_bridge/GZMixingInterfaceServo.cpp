@@ -33,6 +33,8 @@
 
 #include "GZMixingInterfaceServo.hpp"
 
+#define SERVO_OUTPUT_SCALING (10.)
+#define SERVO_OUTPUT_OFFSET (180.)
 
 bool GZMixingInterfaceServo::init(const std::string &model_name)
 {
@@ -66,8 +68,9 @@ bool GZMixingInterfaceServo::updateOutputs(bool stop_motors, uint16_t outputs[MA
 		if (_mixing_output.isFunctionSet(i)) {
 			gz::msgs::Double servo_output;
 
-
-			double output = math::radians((double)outputs[i] / 10. - 180.);
+			// TODO: update the SIM_GZ_ params to floats instead of uint to unlock
+			// parameterizing of min/max angles and servo min/max outputs in ms.
+			double output = math::radians((double)outputs[i] / SERVO_OUTPUT_SCALING - SERVO_OUTPUT_OFFSET);
 
 			// std::cout << "outputs[" << i << "]: " << outputs[i] << std::endl;
 			// std::cout << "  output: " << output << std::endl;
